@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pegote — Stickers que dicen algo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF5E9;
+    --paper-2:#F3E9D2;
+    --ink:#2B2520;
+    --tape-pink:#FF6F91;
+    --tape-yellow:#FFC857;
+    --tape-mint:#5FCBA0;
+    --tape-blue:#5B8DEF;
+    --line:#E3D6B8;
+    --shadow: rgba(43,37,32,0.18);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Nunito Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  a{color:inherit;text-decoration:none;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- TOPBAR ---------- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 28px;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .logo{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.6rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .logo .dot{
+    display:inline-block;
+    width:11px;height:11px;border-radius:50%;
+    background:var(--tape-pink);
+    transform:rotate(0deg);
+  }
+  nav{display:flex;gap:30px;font-weight:600;font-size:0.95rem;}
+  nav a{position:relative;padding-bottom:4px;}
+  nav a:hover{color:var(--tape-pink);}
+  .cart-btn{
+    display:flex;align-items:center;gap:8px;
+    background:var(--ink);color:var(--paper);
+    border:none;border-radius:999px;
+    padding:11px 20px;font-weight:700;font-size:0.92rem;
+    cursor:pointer;font-family:inherit;
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .cart-btn:hover{transform:translateY(-2px);background:#46392e;}
+  .cart-count{
+    background:var(--tape-yellow);color:var(--ink);
+    border-radius:50%;width:20px;height:20px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.72rem;font-weight:800;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:50px 28px 90px;
+    max-width:1180px;margin:0 auto;
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:40px;
+    align-items:center;
+  }
+  .hero-copy .eyebrow{
+    font-weight:800;
+    color:var(--tape-pink);
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    font-size:0.78rem;
+    margin-bottom:14px;
+    display:inline-block;
+    background:#FFE3EC;
+    padding:6px 14px;
+    border-radius:999px;
+  }
+  .hero-copy h1{
+    font-family:'Fredoka', sans-serif;
+    font-size:clamp(2.6rem, 5vw, 4rem);
+    line-height:1.02;
+    font-weight:700;
+    margin:0 0 20px;
+    letter-spacing:-0.01em;
+  }
+  .hero-copy h1 .underline{
+    position:relative;
+    white-space:nowrap;
+  }
+  .hero-copy h1 .underline svg{
+    position:absolute;
+    left:-2%;
+    bottom:-10px;
+    width:104%;
+    height:18px;
+  }
+  .hero-copy p{
+    font-size:1.08rem;
+    line-height:1.6;
+    color:#5b5247;
+    max-width:460px;
+    margin:0 0 30px;
+  }
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--tape-pink);
+    color:#fff;
+    border:none;
+    padding:15px 28px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:1rem;
+    font-family:inherit;
+    cursor:pointer;
+    box-shadow:0 8px 0 0 #d44e6c;
+    transition:transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .btn-primary:hover{transform:translateY(2px);box-shadow:0 6px 0 0 #d44e6c;}
+  .btn-secondary{
+    background:transparent;
+    color:var(--ink);
+    border:2.5px solid var(--ink);
+    padding:13px 26px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:1rem;
+    font-family:inherit;
+    cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .btn-secondary:hover{background:var(--ink);color:var(--paper);}
+
+  /* ---------- HERO STICKER STAGE ---------- */
+  .sticker-stage{
+    position:relative;
+    height:430px;
+  }
+  .stage-surface{
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.5), transparent 40%),
+      var(--paper-2);
+    border-radius:28px;
+    border:2px solid var(--line);
+    overflow:hidden;
+  }
+  .stage-surface::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(43,37,32,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(43,37,32,0.04) 1px, transparent 1px);
+    background-size:26px 26px;
+  }
+  .stick{
+    position:absolute;
+    width:120px;height:120px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2.6rem;
+    filter:drop-shadow(0 10px 14px var(--shadow));
+    cursor:default;
+    transition:transform 0.25s ease;
+    border:4px solid #fff;
+  }
+  .stick:hover{transform:scale(1.08) rotate(0deg) !important;}
+  .stick.s1{background:var(--tape-yellow);top:6%;left:8%;transform:rotate(-9deg);}
+  .stick.s2{background:var(--tape-mint);top:12%;left:48%;transform:rotate(8deg);width:100px;height:100px;font-size:2.2rem;}
+  .stick.s3{background:var(--tape-blue);top:46%;left:6%;transform:rotate(5deg);width:96px;height:96px;font-size:2rem;}
+  .stick.s4{background:#fff;top:54%;left:52%;transform:rotate(-6deg);width:140px;height:140px;font-size:3rem;border-color:var(--tape-pink);}
+  .stick.s5{background:var(--tape-pink);top:4%;left:74%;transform:rotate(14deg);width:88px;height:88px;font-size:1.9rem;}
+  .stick.s6{background:#fff;top:66%;left:78%;transform:rotate(-12deg);width:92px;height:92px;font-size:1.8rem;border-color:var(--tape-yellow);}
+
+  .tag-floating{
+    position:absolute;
+    bottom:18px;left:18px;
+    background:var(--ink);
+    color:var(--paper);
+    padding:9px 16px;
+    border-radius:999px;
+    font-size:0.8rem;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .tag-floating .pulse{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--tape-mint);
+  }
+
+  /* ---------- MARQUEE ---------- */
+  .marquee{
+    background:var(--ink);
+    color:var(--paper);
+    overflow:hidden;
+    padding:14px 0;
+    white-space:nowrap;
+  }
+  .marquee-track{
+    display:inline-flex;
+    gap:40px;
+    animation:scroll 26s linear infinite;
+  }
+  .marquee-track span{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:1.05rem;
+    display:flex;
+    align-items:center;
+    gap:40px;
+  }
+  .marquee-track span::after{content:"✦";color:var(--tape-yellow);margin-left:40px;}
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section{padding:90px 28px;max-width:1180px;margin:0 auto;}
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:44px;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-family:'Fredoka', sans-serif;
+    font-size:clamp(1.9rem, 3vw, 2.6rem);
+    font-weight:700;
+    margin:0;
+  }
+  .section-head p{
+    color:#7a7062;
+    max-width:380px;
+    margin:0;
+    line-height:1.5;
+  }
+
+  /* ---------- FILTER CHIPS ---------- */
+  .chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;}
+  .chip{
+    padding:9px 18px;
+    border-radius:999px;
+    border:2px solid var(--line);
+    font-weight:700;
+    font-size:0.85rem;
+    background:transparent;
+    cursor:pointer;
+    font-family:inherit;
+    color:var(--ink);
+    transition:all 0.15s ease;
+  }
+  .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .chip:hover:not(.active){border-color:var(--ink);}
+
+  /* ---------- PRODUCT GRID ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:26px;
+  }
+  .card{
+    background:#fff;
+    border-radius:20px;
+    padding:22px 20px 24px;
+    position:relative;
+    border:2px solid var(--line);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover{transform:translateY(-6px);box-shadow:0 16px 28px var(--shadow);}
+  .card-stage{
+    height:140px;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:16px;
+    position:relative;
+  }
+  .card-emoji{
+    font-size:4.2rem;
+    filter:drop-shadow(0 8px 10px var(--shadow));
+    transform:rotate(-6deg);
+    transition:transform 0.25s ease;
+  }
+  .card:hover .card-emoji{transform:rotate(0deg) scale(1.06);}
+  .badge{
+    position:absolute;
+    top:0;right:0;
+    background:var(--tape-pink);
+    color:#fff;
+    font-size:0.68rem;
+    font-weight:800;
+    padding:5px 11px;
+    border-radius:999px;
+    letter-spacing:0.04em;
+  }
+  .badge.new{background:var(--tape-mint);}
+  .card h3{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.08rem;
+    font-weight:600;
+    margin:0 0 6px;
+  }
+  .card .desc{
+    font-size:0.84rem;
+    color:#8a8071;
+    margin:0 0 14px;
+    line-height:1.4;
+  }
+  .card-foot{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .price{font-family:'Fredoka', sans-serif;font-weight:700;font-size:1.15rem;}
+  .add-btn{
+    background:var(--paper-2);
+    border:2px solid var(--ink);
+    color:var(--ink);
+    width:38px;height:38px;
+    border-radius:50%;
+    font-size:1.2rem;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+  .add-btn:hover{background:var(--ink);color:var(--paper);transform:rotate(90deg);}
+
+  /* ---------- HOW IT WORKS ---------- */
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  .step{
+    background:var(--paper-2);
+    border-radius:20px;
+    padding:32px 26px;
+    border:2px solid var(--line);
+  }
+  .step .num{
+    font-family:'Fredoka', sans-serif;
+    font-size:2.4rem;
+    font-weight:700;
+    color:var(--tape-pink);
+    display:block;
+    margin-bottom:10px;
+    line-height:1;
+  }
+  .step h4{font-family:'Fredoka', sans-serif;font-size:1.15rem;margin:0 0 8px;}
+  .step p{color:#7a7062;font-size:0.92rem;line-height:1.55;margin:0;}
+
+  /* ---------- NEWSLETTER / CTA ---------- */
+  .cta-band{
+    margin:0 28px 90px;
+    max-width:1124px;
+    margin-left:auto;margin-right:auto;
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:28px;
+    padding:60px 50px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-band::before{
+    content:"";
+    position:absolute;
+    width:260px;height:260px;
+    border-radius:50%;
+    background:var(--tape-pink);
+    opacity:0.18;
+    top:-80px;right:-60px;
+  }
+  .cta-band h3{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.9rem;
+    margin:0 0 10px;
+    max-width:420px;
+    position:relative;
+  }
+  .cta-band p{color:#cfc6b8;margin:0;max-width:380px;position:relative;}
+  .cta-form{
+    display:flex;
+    gap:10px;
+    position:relative;
+    flex-shrink:0;
+  }
+  .cta-form input{
+    background:#3a3128;
+    border:2px solid #524636;
+    color:var(--paper);
+    padding:13px 18px;
+    border-radius:999px;
+    font-family:inherit;
+    font-size:0.9rem;
+    width:230px;
+  }
+  .cta-form input::placeholder{color:#a89c89;}
+  .cta-form button{
+    background:var(--tape-yellow);
+    color:var(--ink);
+    border:none;
+    padding:13px 22px;
+    border-radius:999px;
+    font-weight:800;
+    font-family:inherit;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:50px 28px 36px;
+    max-width:1180px;
+    margin:0 auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-top:2px solid var(--line);
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  footer .f-logo{
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    font-size:1.2rem;
+  }
+  footer .f-links{display:flex;gap:26px;font-size:0.88rem;font-weight:600;}
+  footer .f-links a:hover{color:var(--tape-pink);}
+  footer .f-copy{font-size:0.8rem;color:#9a9183;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    nav{display:none;}
+    .hero{grid-template-columns:1fr;}
+    .sticker-stage{height:340px;order:-1;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .steps{grid-template-columns:1fr;}
+    .cta-band{flex-direction:column;text-align:center;padding:44px 28px;}
+    .cta-form{width:100%;}
+    .cta-form input{width:100%;}
+  }
+  @media (max-width:520px){
+    .grid{grid-template-columns:1fr 1fr;gap:14px;}
+    .card{padding:16px 14px 18px;}
+    .topbar{padding:18px 20px;}
+    .hero{padding:30px 20px 60px;}
+    .section{padding:60px 20px;}
+  }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="logo"><span class="dot"></span>Pegote</div>
+    <nav>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#novedades">Novedades</a>
+    </nav>
+    <button class="cart-btn">Carrito <span class="cart-count">3</span></button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">Hecho a mano, pegado con cariño</span>
+      <h1>Stickers para decir<br>
+        <span class="underline">lo que pensás
+          <svg viewBox="0 0 300 18" preserveAspectRatio="none">
+            <path d="M2 12 Q 75 2, 150 10 T 298 8" stroke="#FFC857" stroke-width="8" fill="none" stroke-linecap="round"/>
+          </svg>
+        </span>
+      sin decir nada</h1>
+      <p>Más de 400 diseños originales para tu notebook, tu agenda o donde se te ocurra. Vinilo resistente al agua, sin burbujas, con envío a todo el país.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary">Ver catálogo</button>
+        <button class="btn-secondary">Armar mi pack</button>
+      </div>
+    </div>
+    <div class="sticker-stage">
+      <div class="stage-surface"></div>
+      <div class="stick s1">🌵</div>
+      <div class="stick s2">🍩</div>
+      <div class="stick s3">🐱</div>
+      <div class="stick s4">✨</div>
+      <div class="stick s5">🍒</div>
+      <div class="stick s6">🌈</div>
+      <div class="tag-floating"><span class="pulse"></span>+120 personas comprando hoy</div>
+    </div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>Envío gratis desde $15.000 <span>Vinilo resistente al agua <span>Packs personalizados <span>Despacho en 24hs <span>Envío gratis desde $15.000 <span>Vinilo resistente al agua <span>Packs personalizados <span>Despacho en 24hs</span></span></span></span></span></span></span>
+    </div>
+  </div>
+
+  <section class="section" id="catalogo">
+    <div class="section-head">
+      <h2>Elegí tu tribu de stickers</h2>
+      <p>Organizamos todo por vibra, no por catálogo aburrido. Tocá una categoría y mirá qué sale.</p>
+    </div>
+    <div class="chips">
+      <button class="chip active">Todos</button>
+      <button class="chip">Animalitos</button>
+      <button class="chip">Comida</button>
+      <button class="chip">Frases</button>
+      <button class="chip">Naturaleza</button>
+      <button class="chip">Brillantes</button>
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <span class="badge new">Nuevo</span>
+        <div class="card-stage"><div class="card-emoji">🐸</div></div>
+        <h3>Rana de buen humor</h3>
+        <p class="desc">5cm, vinilo mate, ideal para termo.</p>
+        <div class="card-foot"><span class="price">$1.200</span><button class="add-btn">+</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-stage"><div class="card-emoji">🍕</div></div>
+        <h3>Porción eterna</h3>
+        <p class="desc">Pack x3, brillo holográfico.</p>
+        <div class="card-foot"><span class="price">$1.500</span><button class="add-btn">+</button></div>
+      </div>
+
+      <div class="card">
+        <span class="badge">-20%</span>
+        <div class="card-stage"><div class="card-emoji">🌙</div></div>
+        <h3>Luna distraída</h3>
+        <p class="desc">7cm, brillo en la oscuridad.</p>
+        <div class="card-foot"><span class="price">$1.800</span><button class="add-btn">+</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-stage"><div class="card-emoji">🐢</div></div>
+        <h3>Tortuga sin apuro</h3>
+        <p class="desc">5cm, vinilo mate.</p>
+        <div class="card-foot"><span class="price">$1.100</span><button class="add-btn">+</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-stage"><div class="card-emoji">🍓</div></div>
+        <h3>Frutilla rebelde</h3>
+        <p class="desc">Pack x4, frutas varias.</p>
+        <div class="card-foot"><span class="price">$1.600</span><button class="add-btn">+</button></div>
+      </div>
+
+      <div class="card">
+        <span class="badge new">Nuevo</span>
+        <div class="card-stage"><div class="card-emoji">👽</div></div>
+        <h3>Visitante curioso</h3>
+        <p class="desc">6cm, brillo holográfico.</p>
+        <div class="card-foot"><span class="price">$1.400</span><button class="add-btn">+</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-stage"><div class="card-emoji">🌻</div></div>
+        <h3>Girasol terco</h3>
+        <p class="desc">8cm, vinilo mate XL.</p>
+        <div class="card-foot"><span class="price">$1.900</span><button class="add-btn">+</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-stage"><div class="card-emoji">🐙</div></div>
+        <h3>Pulpo de ocho planes</h3>
+        <p class="desc">6cm, colores saturados.</p>
+        <div class="card-foot"><span class="price">$1.300</span><button class="add-btn">+</button></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="como-funciona">
+    <div class="section-head">
+      <h2>Tan fácil como pegar un sticker</h2>
+      <p>Sin vueltas, sin letra chica.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="num">01</span>
+        <h4>Elegís tus diseños</h4>
+        <p>Recorré el catálogo, filtrá por categoría y sumá lo que te guste al carrito.</p>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <h4>Pagás seguro</h4>
+        <p>Tarjeta, transferencia o billetera virtual. Todo encriptado, todo tranquilo.</p>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <h4>Llega a tu puerta</h4>
+        <p>Empaquetamos con cuidado y despachamos en menos de 24hs hábiles.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band" id="novedades">
+    <div>
+      <h3>Te avisamos cuando sale algo nuevo</h3>
+      <p>Una vez por semana, cero spam, solo stickers recién salidos del horno.</p>
+    </div>
+    <form class="cta-form" onsubmit="return false;">
+      <input type="email" placeholder="tu@email.com" required>
+      <button type="submit">Quiero saber</button>
+    </form>
+  </div>
+
+  <footer>
+    <div class="f-logo">Pegote</div>
+    <div class="f-links">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#">Contacto</a>
+    </div>
+    <div class="f-copy">© 2026 Pegote. Todos los derechos pegados.</div>
+  </footer>
+
+</body>
+</html>
